@@ -5,14 +5,9 @@ import logging
 max_requests_per_minute = 20
 max_tokens_per_minute = 40000
 
-async def processingFile(file,is_video,whisper_model,prompt0):
-    # check the file type
-    if is_video :
-        # if the file is video, convert it to audio
-        file = convertVideoToAudio(file)
-    # process the audio file
-
+def processingFile(file,is_video,whisper_model,prompt0):
     # translate the audio file to text
+    logging.debug("transcribing audio")
     output = whisper_model.transcribe(file)
     text = output['text']
     allwords=text.split(" ")
@@ -29,10 +24,10 @@ async def processingFile(file,is_video,whisper_model,prompt0):
 
     para = ' '.join(parts[0])
     prompt = f"{prompt0} {para}"    
-    openai.key_api = "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"
+    openai.api_key = "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"
 
     logging.debug("requesting openai")
-    response0 = openai.Completion.create(
+    response0 = openai.ChatCompletion.create(
     model="gpt-3.5-turbo",
     prompt=prompt,
     temperature=0,

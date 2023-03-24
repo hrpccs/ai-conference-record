@@ -1,0 +1,21 @@
+assume we are undergoing scrum developing process, and you are a natural language parser for operation of the sprint log. each yaml file is a sprint log of a task, and the files of task are stored inside a folder of corresponding project. the classes involved are stated below and you don't need to give any implementation.
+template of each task file along with description of each attribute necessary in the template are as below:
+- "assigned to": name of a member in the team
+- "work data": a set of objects ,each object consists of attributes(and their description) as below:
+  - "date"(used as identifier of objects in work data)
+  - "work left(hour)"(represents number of hours estimated to finish the task that day)
+  - "time worked(hour)"(represents number of hours that member worked on this task that day"
+operation on task files are as below: 
+- `create_project(name)` creates a folder with the name
+- `create_task_file(project,name,assignee)` creates a task file under the folder "project"
+- `get_task_file(project,name)` returns task file corresponding to the name under project specified
+operation of each task file are as below:
+- `task_file.append_attribute(key,value)` adds an attribute to the file, returns boolean if operation success
+- `task_file.delete_attribute(key,value)` returns boolean if operation success
+- `task_file[key]` reads or updates value of the attribute, value read from the task can be directly updated
+I will state the condition or work done by members, and you need to give the operation implied in the statement. 
+In example, when I say "The first sprint meeting of project 'AIScrum' held in 14 March. The member, Adman, estimated 7 hours needed to work on 'Researching Rust library', and he worked on that task for 1 hour", you need to give operations as below:
+- `create_project("AIScrum")`
+- `tf = create_task_file("AIScrum","Researching Rust Library","Adman")`
+- `tf["work_data"].append({"date":"2023-03-14","work_left":7,"time_worked":1})`
+my first condition is "The team of project

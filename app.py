@@ -5,9 +5,11 @@ from moviepy.editor import VideoFileClip
 import openai
 import logging
 import whisper
+from deepgram import Deepgram
 
 app = Flask(__name__)
 whisper_model = whisper.load_model('base')
+dg_client = Deepgram('4dd05066b84ab97f2123e71232a5a5cafe245494')
 prompt = ""
 logging.basicConfig(filename='app.log', level=logging.DEBUG)
 
@@ -33,11 +35,15 @@ def upload():
         filename = filename.split(".")[0] + ".wav"
         audio.write_audiofile(f"storage/{filename}")
 
+    with open(f"storage/{filename}", "rb") as audio:
+        source = {'buffer': audio, 'mimetype' : "audio/wav"}
+        result = processingFileWithDeepGram(source,dg_client,prompt)
     # TODO : add wait prompt 
-    result = processingFile(f"storage/{filename}",is_video,whisper_model,prompt)
+    # result = processingFile(f"storage/{filename}",is_video,whisper_model,prompt)
+
     return render_template('result.html', result=result)
 
 if __name__ == '__main__':
-    promptfile = open("prompt.txt", "r")
+    promptfile = open("prompt1.txt", "r")
     prompt = promptfile.read()
     app.run(debug=True)

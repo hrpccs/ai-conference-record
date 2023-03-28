@@ -9,14 +9,14 @@ from deepgram import Deepgram
 import os
 
 app = Flask(__name__)
+with open('DEEPGRAM_API.env', 'r') as f:
+    app.config['DEEPGRAM_API'] = f.read()
+
 whisper_model = whisper.load_model('base')
-dg_client = Deepgram(os.environ.get('DATABASE_URL'))
+dg_client = Deepgram(os.environ.get('DEEPGRAM_API'))
 prompt = ""
 logging.basicConfig(filename='app.log', level=logging.DEBUG)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():

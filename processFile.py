@@ -11,48 +11,19 @@ max_tokens_per_request = 2000
 
 def processingFileWithDeepGram(file,dg_client,prompt0):
     # translate the audio file to text
-    output = dg_client.transcription.sync_prerecorded(file, {'diarize': True})
-    channel = output['results']['channels']
-    # for i in range(len(channel)):
-    #     text = channel[i]['transcript']
-    #     allwords=text.split(" ")
-    #     tokenlen = len(allwords)
-    #     tokenLenBook.append(tokenlen)
-
-    # for i in range(1,len(tokenLenBook)):
-    #     tokenLenBook[i] = tokenLenBook[i-1] + tokenLenBook[i];
-
+    output = dg_client.transcription.sync_prerecorded(file,{'paragraphs': True})
+    result = output['results']['channels'][0]['alternatives'][0]
     message = [{"role": "assistant", "content": prompt0}]
-    prompt = ""
-
-    words = output['results']['channels'][0]['alternatives'][0]['words']
-    logging.debug("words: " + json.dumps(words))
-    speaker = []
-
-    for i in range(len(words)):
-        while(len(speaker) <= words[i]['speaker']):
-            speaker.append("")
-        speaker[words[i]['speaker']] += words[i]['word'] + " "
-    
-    
-    for i in range(len(speaker)):
-        text = speaker[i]
-        if i == 0 :
-            prompt = text
-        else:
-            prompt = f"{prompt} \n\n\n\n\n {text}"
-     
-    logging.debug("prompt: " + prompt + "\n\n\n")
-    message.append({"role": "user", "content": prompt})
+    paragraphs = result['paragraphs']['transcript']
+    logging.debug("paragraphs: " + str(paragraphs))
+    message.append({"role": "user", "content": paragraphs})
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages = message,
         max_tokens=500,
         temperature=0,
     )
-    
     ans = response['choices'][0]['message']['content']
-
     return ans
 
 def processingFile(file,is_video,whisper_model,prompt0):

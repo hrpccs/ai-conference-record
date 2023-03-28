@@ -35,13 +35,9 @@ def upload():
         audio = clip.audio
         filename = filename.split(".")[0] + ".wav"
         audio.write_audiofile(f"storage/{filename}")
-
     with open(f"storage/{filename}", "rb") as audio:
         source = {'buffer': audio, 'mimetype' : "audio/wav"}
         result = processingFileWithDeepGram(source,dg_client,prompt)
-    # TODO : add wait prompt 
-    # result = processingFile(f"storage/{filename}",is_video,whisper_model,prompt)
-
     return render_template('result.html', result=result)
 
 if __name__ == '__main__':

@@ -5,4 +5,5 @@ In example, when I say "The first sprint meeting of project 'AIScrum' held in 14
 - `create_project("AIScrum")`
 - `tf = create_task_file("AIScrum","Researching Rust Library","Adman")`
 - `tf["work_data"].append({"date":"2023-03-14","work_left":7,"time_worked":1})`
-my first condition is "The team of project
+If there is no task described in the dialogue, please reply "No Task"
+my first condition is 

@@ -6,10 +6,11 @@ import openai
 import logging
 import whisper
 from deepgram import Deepgram
+import os
 
 app = Flask(__name__)
 whisper_model = whisper.load_model('base')
-dg_client = Deepgram('4dd05066b84ab97f2123e71232a5a5cafe245494')
+dg_client = Deepgram(os.environ.get('DATABASE_URL'))
 prompt = ""
 logging.basicConfig(filename='app.log', level=logging.DEBUG)
 

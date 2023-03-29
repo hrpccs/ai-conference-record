@@ -20,7 +20,7 @@ logging.basicConfig(filename='app.log', level=logging.DEBUG)
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    file = request.files['file']
+    file = request.json.get('message')
     filename = file.filename
     file.save(f"storage/{filename}")
     # Process the file contents here
@@ -40,7 +40,29 @@ def upload():
         result = processingFileWithDeepGram(source,dg_client,prompt)
     return render_template('result.html', result=result)
 
+@app.route('/api/withUrl', methods=['POST'])
+def api():
+    operations = request.json.get('operations')
+    tasks = request.json.get('tasks')
+    meida_url = request.json.get('media_url')
+    # Process the file contents here
+
+
+
+@app.route('/api/withFile', methods=['POST'])
+def api():
+    operations = request.json.get('operations')
+    tasks = request.json.get('tasks')
+    file = request.json.get('file')
+
+    # turn tasks to a prompt
+    
+
+
+
+
+
 if __name__ == '__main__':
-    promptfile = open("prompt1.txt", "r")
+    promptfile = open("prompt.txt", "r")
     prompt = promptfile.read()
     app.run(debug=True)

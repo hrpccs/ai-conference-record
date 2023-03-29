@@ -216,11 +216,12 @@ export interface LoginData {
   email?: string;
   password: string;
 }
-export async function loginUser(baseURL:string,data: LoginData): Promise<string> {
-  const response = await fetch(`https://${baseURL}/users/login`, {
+export async function loginUser(baseURL:string,data: LoginData,api_key:string): Promise<string> {
+  const response = await fetch(`http://${baseURL}/users/login`, { // TODO: when in production, remember to enable https and only allows https access
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Authorization":api_key,
     },
     body: JSON.stringify(data),
   });
@@ -354,7 +355,7 @@ export async function deleteCard(boardId, listId, cardId, token) {
       project_name: "",
       lists: []
     };
-  
+  // TODO: change to tasksubmitted
     // Group the input data by project and list
     const groupedData = inputData.reduce((acc:AnyDict, data) => {
       const { project_name, list_id, card_id, task_id } = data;
@@ -382,7 +383,7 @@ export async function deleteCard(boardId, listId, cardId, token) {
     return outputData;
   }
 
-  export function convertToInputData(outputData: CardSubmitted): InputData[] {
+  export function splitTree(outputData: CardSubmitted): InputData[] {
     const inputData: InputData[] = [];
   
     // Iterate over the lists in the outputData and create InputData objects for each task

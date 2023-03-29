@@ -6,23 +6,23 @@
     </el-header>
     <el-main>
       <Auth @save-key="onSaveKey(key)" 
-    :disabled="curr_stage!=1"
+    v-show="curr_stage==1"
     />
     <FileUpload 
     @file-upload="onUploadFile"
-    :disabled="curr_stage!=2"
+    v-show="curr_stage==2"
     />
 
     <FormConfirm 
     :tasksList="wekan_tasks_list"
-    :disabled="curr_stage!=4"
+    v-show="curr_stage==4"
     @confirmed="submitToKanban(wekan_tasks_list)"
     />
-    <div :if="curr_stage!=3">
+    <div v-if="curr_stage==3">
     <!-- https://pixabay.com/gifs/load-loading-process-wait-delay-36/ -->
     <img src="./assets/loading.gif" alt="Loading animation" />
     </div>
-    <Help :if="showHelp"/>
+    <Help v-if="showHelp"/>
     </el-main>
   </el-container>
 
@@ -127,9 +127,7 @@ function submitToKanban(result_tasks_list:Card[]){
 }
 
 </script>
-<style scoped>
-el-input{
-  height:1em;
-}
+<style >
+
 
 </style>

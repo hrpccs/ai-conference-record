@@ -41,6 +41,7 @@ const client_id = ref('');
 const access_token = ref('');
 const webhook = ref('');
 // **** WeKan authentication ****
+const token = ref('');
 const baseURL=ref('');
 const username=ref('');
 const password=ref('');
@@ -52,8 +53,9 @@ function authorize() {
   if (backend_type.value == "wekan"){
     try{
       if (isEmail(username.value))
-      loginUser(baseURL.value,{email:username.value,password:password.value})
-      else loginUser(baseURL.value,{username:username.value,password:password.value})
+      token = loginUser(baseURL.value,{email:username.value,password:password.value})
+      else token = loginUser(baseURL.value,{username:username.value,password:password.value})
+      
     } catch (error){
       window.alert(error)
     }

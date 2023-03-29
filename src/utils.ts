@@ -2,16 +2,21 @@ export function isEmail(s:string) {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     return emailRegex.test(s);
   }
-export const backend = "https://localhost:8000"
 
+
+
+
+export const backend = "https://localhost:8000"
+export const webdav = "https://dav.jianguoyun.com/dav/"
 export class UniqueIdMap {
   private counter = 0;
   private map = new Map<string, [number, string]>();
   private reverseMap = new Map<number, [string, string, string]>();
 
-  getUniqueId(projectId: string, listId: string, cardId: string, cardName: string): number {
+  getUniqueId(projectId: string, listId: string, cardId: string, cardName?: string): number {
     const key = `${projectId}:${listId}:${cardId}`;
-    if (this.map.has(key)) {
+
+    if(this.map.has(key)) {
       const [uniqueId, existingCardName] = this.map.get(key)!;
       if (cardName !== existingCardName) {
         throw new Error(`Card name does not match existing mapping: ${existingCardName}`);

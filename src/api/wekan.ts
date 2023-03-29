@@ -216,12 +216,12 @@ export interface LoginData {
   email?: string;
   password: string;
 }
-export async function loginUser(baseURL:string,data: LoginData,api_key:string): Promise<string> {
+export async function loginUser(baseURL:string,data: LoginData): Promise<string> {
+  console.log("login",data)
   const response = await fetch(`http://${baseURL}/users/login`, { // TODO: when in production, remember to enable https and only allows https access
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      "Authorization":api_key,
+      "Content-Type": "application/x-www-form-urlencoded",
     },
     body: JSON.stringify(data),
   });

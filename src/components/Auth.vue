@@ -21,7 +21,6 @@
       <el-input v-model="username" placeholder="username或email"/>
       <el-input type="password" v-model="password" placeholder="password" show-password/>
     <el-button :disabled="!username || !password" @click="authorize">登录</el-button>
-
     </div>
   </div>
 </template>

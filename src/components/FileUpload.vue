@@ -19,18 +19,13 @@
 <script setup lang="ts">
 import { defineEmits,ref } from 'vue';
 import type { UploadInstance,UploadProps } from 'element-plus'
-import {backend} from "../api/wekan.js";
+import {webdav} from "../utils.js";
 const uploadRef = ref<UploadInstance>()
-const file_url = ref(backend)
+const file_url = ref(webdav)
 const emit = defineEmits(['fileUpload']);
 const beforeFileUpload:UploadProps['beforeUpload'] = (file)=>{
-  // Determine the MIME type of the file
-  const type = file.type;
-
-  
-
   // Append the file name to the WebDAV URL
-  file_url.value = backend+file.name.substring(file.name.lastIndexOf('.') + 1);
+  file_url.value = webdav+file.name.substring(file.name.lastIndexOf('.') + 1);
   return true;
 }
 function afterFileUpload() {

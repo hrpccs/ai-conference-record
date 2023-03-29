@@ -9,14 +9,16 @@ max_tokens_per_request = 2000
 
 # no more than 4000 token per request
 
-def processingFileWithDeepGram(file,dg_client,prompt0):
+def processingFileWithDeepGram(file,dg_client,prompt0,tasklist=[]):
     # translate the audio file to text
     output = dg_client.transcription.sync_prerecorded(file,{'paragraphs': True})
     result = output['results']['channels'][0]['alternatives'][0]
     message = [{"role": "assistant", "content": prompt0}]
     paragraphs = result['paragraphs']['transcript']
     logging.debug("paragraphs: " + str(paragraphs))
-    message.append({"role": "user", "content": paragraphs})
+
+    userPrompt = {"tasklist": tasklist, "content": paragraphs}
+    message.append({"role": "user", "content": userPrompt})
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages = message,
@@ -24,6 +26,8 @@ def processingFileWithDeepGram(file,dg_client,prompt0):
         temperature=0,
     )
     ans = response['choices'][0]['message']['content']
+    print(ans)
+    print(ans[0])
     return ans
 
 def processingFile(file,is_video,whisper_model,prompt0):

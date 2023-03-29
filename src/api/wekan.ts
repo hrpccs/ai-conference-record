@@ -1,5 +1,8 @@
 
 //** wekan */
+
+import { AnyDict } from "../utils";
+
 // wekan process address
 export const wekan_url="192.168.56.1:2000"
   
@@ -326,3 +329,75 @@ export async function deleteCard(boardId, listId, cardId, token) {
     }
   }
   
+
+  //TODO: suit with code
+  interface InputData {
+    project_name: string;
+    list_id: string;
+    card_id: string;
+    task_id: string;
+  }
+  
+  interface OutputData {
+    project_name: string;
+    lists: {
+      list_id: string;
+      tasks: {
+        task_id: string;
+        task_name: string;
+      }[];
+    }[];
+  }
+  
+  export function categorizeCards(inputData: Card[]): OutputData {
+    const outputData: OutputData = {
+      project_name: "",
+      lists: []
+    };
+  
+    // Group the input data by project and list
+    const groupedData = inputData.reduce((acc:AnyDict, data) => {
+      const { project_name, list_id, card_id, task_id } = data;
+      if (!acc[project_name]) {
+        acc[project_name] = {};
+      }
+      if (!acc[project_name][list_id]) {
+        acc[project_name][list_id] = [];
+      }
+      acc[project_name][list_id].push({ card_id, task_id });
+      return acc;
+    }, {});
+  
+    // Convert the grouped data into the output format
+    outputData.project_name = inputData[0].project_name;
+    for (const list_id in groupedData[outputData.project_name]) {
+      const tasks = groupedData[outputData.project_name][list_id].map(
+        ({ task_id, card_id }) => {
+          return { task_id, task_name: `Task ${card_id}` };
+        }
+      );
+      outputData.lists.push({ list_id, tasks });
+    }
+  
+    return outputData;
+  }
+
+  export function convertToInputData(outputData: CardSubmitted): InputData[] {
+    const inputData: InputData[] = [];
+  
+    // Iterate over the lists in the outputData and create InputData objects for each task
+    outputData.lists.forEach((list) => {
+      const { list_id, tasks } = list;
+      tasks.forEach((task) => {
+        const { task_id } = task;
+        inputData.push({
+          project_name: outputData.project_name,
+          list_id,
+          card_id: task_id,
+          task_id
+        });
+      });
+    });
+  
+    return inputData;
+  }

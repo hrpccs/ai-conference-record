@@ -49,12 +49,12 @@ const {backend_type,change_backend_type} = inject("backend_type")
 
 
 
-function authorize() {
+async function authorize() {
   if (backend_type.value == "wekan"){
     try{
       if (isEmail(username.value))
-      token = loginUser(baseURL.value,{email:username.value,password:password.value})
-      else token = loginUser(baseURL.value,{username:username.value,password:password.value})
+      token.value =  await loginUser(baseURL.value,{email:username.value,password:password.value})
+      else token.value = await  loginUser(baseURL.value,{username:username.value,password:password.value})
       
     } catch (error){
       window.alert(error)

@@ -33,8 +33,8 @@ import Auth from './components/Auth.vue'
 import FormConfirm from './components/FormConfirm.vue'
 import Help from './components/Help.vue'
 import {ref,provide} from 'vue'
-import { backend,UniqueIdMap} from './utils'
-import { wekan_url, Card,Board,List,Swimlane  } from './api/wekan'
+import { AnyDict, backend,UniqueIdMap} from './utils'
+import { wekan_url, Card,Board,List,Swimlane,categorizeCards,splitTree  } from './api/wekan'
 
 enum worktile_auth_method_type{
   access_token,
@@ -88,15 +88,11 @@ async function pullTasksList(){
 }
 async function onUploadFile(url:string){
   //declare a request 
-  let request: { [key: string]: any } = {};
+  let request: AnyDict = {};
   request['media_url'] = url
   await pullTasksList()
   let obtained_tasks_list = submitted_task_list;
-  for (const task in obtained_tasks_list){
-    let new_task = {
-      project
-    }
-  }
+  categorizeCards()
   request['task_list'] = submitted_task_list
   const options: RequestInit = {
     method: 'POST',
@@ -132,6 +128,8 @@ function submitToKanban(result_tasks_list:Card[]){
 
 </script>
 <style scoped>
-
+el-input{
+  height:1em;
+}
 
 </style>
